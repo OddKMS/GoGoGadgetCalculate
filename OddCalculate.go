@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
@@ -17,7 +18,7 @@ type CalcResponse struct {
 func HandleLambdaEvent(event CalcEvent) (CalcResponse, error) {
 	return CalcResponse{
 			//result from calculation
-			Result: "test"},
+			Result: fmt.Sprint(calculate(event.Number1, event.Number2, event.Operator))},
 		nil
 }
 
