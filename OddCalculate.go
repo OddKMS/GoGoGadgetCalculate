@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
@@ -12,13 +11,12 @@ type CalcEvent struct {
 }
 
 type CalcResponse struct {
-	Result string `json:"Result:"`
+	Result int `json:"Result:"`
 }
 
 func HandleLambdaEvent(event CalcEvent) (CalcResponse, error) {
 	return CalcResponse{
-			//result from calculation
-			Result: fmt.Sprint(calculate(event.Number1, event.Number2, event.Operator))},
+			Result: calculate(event.Number1, event.Number2, event.Operator)},
 		nil
 }
 
@@ -26,27 +24,31 @@ func main() {
 	lambda.Start(HandleLambdaEvent)
 }
 
-//To get this up and running ASAP I'm intentionally foregoing tests and edge cases.
-//Welcome to programming horror stories chpt. 1 - "Trusting the user"
+//Simple calculation of numbers, supporting addition, subtraction, multiplication, and division.
 func calculate(num1, num2 int, opr string) (result int) {
 	switch operator := opr; operator {
+	//Uses fallthrough to synonymous cases
 	case "+":
+		fallthrough
 	case "add":
 		{
 			return num1 + num2
 		}
 	case "-":
+		fallthrough
 	case "sub":
 		{
 			return num1 - num2
 		}
 	case "*":
+		fallthrough
 	case "mul":
 		{
 			return num1 * num2
 
 		}
 	case "/":
+		fallthrough
 	case "div":
 		{
 			//Okay, so I don't trust the user THAT much.
@@ -58,5 +60,4 @@ func calculate(num1, num2 int, opr string) (result int) {
 	default:
 		return 0
 	}
-	return 0
 }
