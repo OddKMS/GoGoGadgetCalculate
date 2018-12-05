@@ -23,3 +23,7 @@ func HandleLambdaEvent(event CalcEvent) (CalcResponse, error) {
 	},
 	nil
 }
+
+func main(){
+	lambda.Start(HandleLambdaEvent)
+}
