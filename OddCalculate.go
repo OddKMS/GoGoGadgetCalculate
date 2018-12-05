@@ -5,8 +5,8 @@ import (
 )
 
 type CalcEvent struct {
-	Number1  int    `json:"Number 1"`
-	Number2  int    `json:"Number 2"`
+	Number1  int    `json:"Number1"`
+	Number2  int    `json:"Number2"`
 	Operator string `json:"Operator"`
 }
 
@@ -15,8 +15,10 @@ type CalcResponse struct {
 }
 
 func HandleLambdaEvent(event CalcEvent) (CalcResponse, error) {
+	var calcResult = calculate(event.Number1, event.Number2, event.Operator)
+
 	return CalcResponse{
-			Result: calculate(event.Number1, event.Number2, event.Operator)},
+			Result: calcResult},
 		nil
 }
 
