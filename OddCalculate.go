@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"github.com/aws/aws-lambda-go/lambda"
-	"math"
 )
 
 type CalcEvent struct {
@@ -18,12 +16,46 @@ type CalcResponse struct {
 
 func HandleLambdaEvent(event CalcEvent) (CalcResponse, error) {
 	return CalcResponse{
-		//result from calculation
-		Result: "test" 
-	},
-	nil
+			//result from calculation
+			Result: "test"},
+		nil
 }
 
-func main(){
+func main() {
 	lambda.Start(HandleLambdaEvent)
+}
+
+//To get this up and running ASAP I'm intentionally foregoing tests and edge cases.
+//Welcome to programming horror stories chpt. 1 - "Trusting the user"
+func calculate(num1, num2 int, opr string) (result int) {
+	switch operator := opr; operator {
+	case "+":
+	case "add":
+		{
+			return num1 + num2
+		}
+	case "-":
+	case "sub":
+		{
+			return num1 - num2
+		}
+	case "*":
+	case "mul":
+		{
+			return num1 * num2
+
+		}
+	case "/":
+	case "div":
+		{
+			//Okay, so I don't trust the user THAT much.
+			if num2 == 0 {
+				return 0
+			}
+			return num1 / num2
+		}
+	default:
+		return 0
+	}
+	return 0
 }
