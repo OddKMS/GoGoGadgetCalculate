@@ -16,7 +16,7 @@ type CalcResponse struct {
 	Number1  int    `json:"Number1"`
 	Number2  int    `json:"Number2"`
 	Operator string `json:"Operator"`
-	Result   int    `json:"Result:"`
+	Result   int    `json:"Result"`
 }
 
 func HandleLambdaEvent(event CalcEvent) (CalcResponse, error) {
