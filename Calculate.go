@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/aws/aws-lambda-go/lambda"
+	"strings"
 )
 
 type CalcEvent struct {
@@ -15,10 +16,8 @@ type CalcResponse struct {
 }
 
 func HandleLambdaEvent(event CalcEvent) (CalcResponse, error) {
-	var calcResult = calculate(event.Number1, event.Number2, event.Operator)
-
 	return CalcResponse{
-			Result: calcResult},
+			Result: calculate(event.Number1, event.Number2, event.Operator)},
 		nil
 }
 
@@ -28,7 +27,9 @@ func main() {
 
 //Simple calculation of numbers, supporting addition, subtraction, multiplication, and division.
 func calculate(num1, num2 int, opr string) (result int) {
-	switch operator := opr; operator {
+	lowerOpr := strings.ToLower(opr)
+
+	switch operator := lowerOpr; operator {
 	//Uses fallthrough to synonymous cases
 	case "+":
 		fallthrough
