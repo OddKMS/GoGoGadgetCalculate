@@ -11,13 +11,20 @@ type CalcEvent struct {
 	Operator string `json:"Operator"`
 }
 
+//Includes the input so we can verify the result ourselves if needed.
 type CalcResponse struct {
-	Result int `json:"Result:"`
+	Number1  int    `json:"Number1"`
+	Number2  int    `json:"Number2"`
+	Operator string `json:"Operator"`
+	Result   int    `json:"Result:"`
 }
 
 func HandleLambdaEvent(event CalcEvent) (CalcResponse, error) {
 	return CalcResponse{
-			Result: calculate(event.Number1, event.Number2, event.Operator)},
+			Number1:  event.Number1,
+			Number2:  event.Number2,
+			Operator: event.Operator,
+			Result:   calculate(event.Number1, event.Number2, event.Operator)},
 		nil
 }
 
