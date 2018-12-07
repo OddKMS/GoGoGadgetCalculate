@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"github.com/aws/aws-lambda-go/lambda"
 	"strings"
 )
@@ -20,12 +21,15 @@ type CalcResponse struct {
 }
 
 func HandleLambdaEvent(event CalcEvent) (CalcResponse, error) {
+
+	var result, calcError = calculate(event.Number1, event.Number2, event.Operator)
+
 	return CalcResponse{
 			Number1:  event.Number1,
 			Number2:  event.Number2,
 			Operator: event.Operator,
-			Result:   calculate(event.Number1, event.Number2, event.Operator)},
-		nil
+			Result:   result},
+		calcError
 }
 
 func main() {
@@ -33,7 +37,7 @@ func main() {
 }
 
 //Simple calculation of numbers, supporting addition, subtraction, multiplication, and division.
-func calculate(num1, num2 int, opr string) (result int) {
+func calculate(num1, num2 int, opr string) (result int, calcError error) {
 	lowerOpr := strings.ToLower(opr)
 
 	switch operator := lowerOpr; operator {
@@ -42,32 +46,38 @@ func calculate(num1, num2 int, opr string) (result int) {
 		fallthrough
 	case "add":
 		{
-			return num1 + num2
+			return num1 + num2, nil
 		}
 	case "-":
 		fallthrough
 	case "sub":
+		fallthrough
+	case "subtract":
 		{
-			return num1 - num2
+			return num1 - num2, nil
 		}
 	case "*":
 		fallthrough
 	case "mul":
+		fallthrough
+	case "multiply":
 		{
-			return num1 * num2
+			return num1 * num2, nil
 
 		}
 	case "/":
 		fallthrough
 	case "div":
+		fallthrough
+	case "divide":
 		{
 			//Okay, so I don't trust the user THAT much.
 			if num2 == 0 {
-				return 0
+				return 0, errors.New("Cannot divide by zero.")
 			}
-			return num1 / num2
+			return num1 / num2, nil
 		}
 	default:
-		return 0
+		return 0, errors.New("Operator out of range.")
 	}
 }
